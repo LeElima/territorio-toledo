@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ListaTerritorio :items="items" :headers="headers"></ListaTerritorio>
+        <ListaTerritorio :items="items" :headers="headers" ></ListaTerritorio>
     </div>
 </template>
 <script lang="ts">
@@ -30,8 +30,6 @@ export default Vue.extend({
             ]
         };
     },
-    methods:{
-
-    }
+    
 })
 </script>

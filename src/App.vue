@@ -19,6 +19,10 @@ export default Vue.extend({
     FooterVue,
     NavigationVue
   },
+  created(){
+    console.log("Oie")
+    this.$store.dispatch("listarTerritorios");
+  }
 })
 </script>
 <style>

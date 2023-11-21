@@ -35,7 +35,6 @@
       async createJson() {
         const response = await fetch("https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-31-mun.json");
         const data = await response.json();
-        console.log(statesData);
         L.geoJson(statesData, { style: this.style, onEachFeature: this.onEachFeature }).addTo(this.map);
       },
   
@@ -58,11 +57,6 @@
         });
       },
   
-      createAction() {
-        document.getElementById("btnTrabalhar").addEventListener('click', () => {
-          console.log('Entrei');
-        });
-      },
   
       style(feature, layer) {
         // Utilize o Vuex aqui se necessário
@@ -94,21 +88,39 @@
         const div = document.createElement("div");
         const territorios = this.$store.state.territorios;
        const territorio = territorios.filter(x=>x.numero == feature.name)   
-
+       
         div.innerHTML = `<br>Nº Territorio: ${feature.name}<br>`;
-        if(!territorio[0].trabalhado){
-            const button = document.createElement("button");
-            button.innerHTML = "Trabalhar";
+        if(territorio.length >0){
+          console.log("Entrei ter")
+          if(!territorio[0].trabalhado){
+              const button = document.createElement("button");
+              button.innerHTML = "Trabalhar";
+      
+              button.onclick = () => {
+                this.gravarTrabalhoTerritorio(feature);
+              };
     
-            button.onclick = () => {
-            console.log(feature.name);
-            };
-  
-        div.appendChild(button);
-        }
+          div.appendChild(button);
+          }
+          
+          
+       }
+       else{
+        const button = document.createElement("button");
+              button.innerHTML = "Trabalhar";
+      
+              button.onclick = () => {
+                this.gravarTrabalhoTerritorio(feature);
+              };
+              div.appendChild(button);
+       }
+       layer.bindPopup(div);
         
-        layer.bindPopup(div);
-      }
+      },
+       gravarTrabalhoTerritorio(item){
+        this.$emit("trabalhar", item);
+        
+       }
     }
   });
   </script>
