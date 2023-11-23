@@ -1,30 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import firebase from 'firebase/compat/app';
+
+import 'firebase/compat/auth';
+
+import db from '../firebase/firebaseInit'
+
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     territorios:[
-      {numero:"1", dataUltimoTrabalho:"10/11/2023", trabalhado: true},
-      {numero:"2", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"3", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"4", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"5", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"6", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"7", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"8", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"9", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"10", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"11", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"12", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"13", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"14", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"15", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"16", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"17", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"18", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
-      {numero:"19", dataUltimoTrabalho:"10/11/2023", trabalhado: false},
+      
     ]
   },
   getters: {
@@ -32,6 +21,24 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
+    async listarTerritorios({state}){
+      const dataBase = await db.collection("trabalhoTerritorio").orderBy('data', 'desc');
+      const resultadoDb = await dataBase.get();
+      var territorios : any[] = [];
+      resultadoDb.forEach((doc)=>{
+        if (!state.territorios.some((t:any) => t!.id === doc.id)) {
+          const data:any = {
+            id: doc.data().id,
+            numero: doc.data().numero,
+            data: doc.data().data,
+            trabalhado: doc.data().trabalhado,
+          };
+          state.territorios!.push(data as never);
+        }
+      })
+      console.log(state.territorios)
+
+    }
   },
   modules: {
   },
